@@ -1,10 +1,14 @@
 # ⛏️ Mina Ferro Pelado — Sistema de Gestão de Pedidos
 
+Filipe Roberto Fernandes de Oliveira 
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/filiperobertofernandes/?locale=en-US)
+[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/mrfiliperoberto)
+
 Sistema de linha de comando desenvolvido em **C** para gerenciar pedidos de minério de ferro classificados por grau de pureza, calculando faturamento, lucro e estatísticas por categoria.
 
 > Projeto desenvolvido como exercício prático de lógica de programação em C, com foco em estruturas de dados, loops e cálculos financeiros.
 
----
+
 
 ## 📋 Funcionalidades
 
@@ -17,7 +21,7 @@ Sistema de linha de comando desenvolvido em **C** para gerenciar pedidos de min�
   - Grau com maior volume extraído (toneladas)
 - Relatório final completo no terminal
 
----
+
 
 ## 🗂️ Graus de Pureza
 
@@ -29,7 +33,7 @@ Sistema de linha de comando desenvolvido em **C** para gerenciar pedidos de min�
 | Grau Médio              | ≥ 75%                |
 | Grau Baixo              | < 75%                |
 
----
+
 
 ## 🚀 Como executar
 
@@ -54,7 +58,7 @@ gcc -o mina main.c
 
 > No Windows: `gcc -o mina.exe main.c` e depois `mina.exe`
 
----
+
 
 ## 📁 Estrutura do projeto
 
@@ -65,7 +69,7 @@ mina-ferro-pelado/
 └── .gitignore      # Arquivos ignorados pelo Git
 ```
 
----
+
 
 ## 🧠 Conceitos aplicados
 
@@ -75,7 +79,7 @@ mina-ferro-pelado/
 - Acumuladores e comparações numéricas
 - Constantes com `#define`
 
----
+
 
 ## 📌 Melhorias planejadas
 
@@ -85,15 +89,10 @@ mina-ferro-pelado/
 - [ ] Exportar relatório para arquivo `.txt`
 - [ ] Versão com interface gráfica (ncurses ou GTK)
 
----
 
-## 👤 Autor
 
-Filipe Roberto Fernandes de Oliveira 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/filiperobertofernandes/?locale=en-US)
-[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/mrfiliperoberto)
 
----
+
 
 ## 📄 Licença
 
