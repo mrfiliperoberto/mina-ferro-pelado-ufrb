@@ -89,9 +89,9 @@ mina-ferro-pelado/
 
 ## 👤 Autor
 
-**Seu Nome**  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://linkedin.com/in/seu-perfil)
-[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/seu-usuario)
+Filipe Roberto Fernandes de Oliveira 
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/filiperobertofernandes/?locale=en-US)
+[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/mrfiliperoberto)
 
 ---
 
