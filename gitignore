@@ -1,0 +1,19 @@
+# Compilados e executáveis
+*.o
+*.out
+*.exe
+mina
+mina.exe
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# Arquivos de debug
+*.dSYM/
+core

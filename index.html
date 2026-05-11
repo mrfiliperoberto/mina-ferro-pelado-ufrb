@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mina Ferro Pelado — Sistema de Gestão</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:       #0e0d0b;
+    --bg2:      #161410;
+    --bg3:      #1e1b16;
+    --border:   #2e2a22;
+    --amber:    #e08a1a;
+    --amber-d:  #a86510;
+    --amber-l:  #f5b24a;
+    --red:      #c0392b;
+    --green:    #2e7d32;
+    --text:     #d4c9b0;
+    --text-d:   #7a7160;
+    --text-l:   #f0e8d8;
+    --mono:     'IBM Plex Mono', monospace;
+    --sans:     'IBM Plex Sans', sans-serif;
+    --display:  'Bebas Neue', cursive;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: .4;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 2rem 2rem;
+    overflow: hidden;
+  }
+  header::after {
+    content: '⛏';
+    position: absolute; right: 2rem; top: 50%; transform: translateY(-50%);
+    font-size: 7rem; opacity: .04; pointer-events: none;
+  }
+  .header-tag {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--amber);
+    letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: .4rem;
+  }
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    letter-spacing: .04em;
+    color: var(--text-l);
+    line-height: 1;
+    margin-bottom: .5rem;
+  }
+  h1 span { color: var(--amber); }
+  .header-sub {
+    font-size: 13px; color: var(--text-d);
+    font-family: var(--mono);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 2rem;
+    display: flex; flex-direction: column; gap: 2.5rem;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-label {
+    display: flex; align-items: center; gap: .75rem;
+    margin-bottom: 1.2rem;
+  }
+  .section-label .num {
+    font-family: var(--display); font-size: 1.8rem;
+    color: var(--amber); line-height: 1;
+  }
+  .section-label .title {
+    font-family: var(--display); font-size: 1.4rem;
+    color: var(--text-l); letter-spacing: .05em;
+  }
+  .section-label .hint {
+    margin-left: auto;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--text-d);
+  }
+
+  /* ── GRAUS GRID ── */
+  .graus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1rem;
+  }
+  .grau-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--amber-d);
+    padding: 1rem;
+    transition: border-color .2s;
+  }
+  .grau-card:hover { border-color: var(--amber); }
+  .grau-card label {
+    display: block;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--amber); letter-spacing: .08em;
+    text-transform: uppercase; margin-bottom: .3rem;
+  }
+  .grau-card .grau-pct {
+    font-size: 11px; color: var(--text-d);
+    font-family: var(--mono); margin-bottom: .6rem;
+  }
+  .grau-card input {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text-l);
+    font-family: var(--mono); font-size: 14px;
+    padding: .5rem .65rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .grau-card input:focus { border-color: var(--amber); }
+  .grau-card input.err { border-color: var(--red); }
+
+  /* ── PEDIDOS TABLE ── */
+  .pedidos-wrap { overflow-x: auto; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-family: var(--mono); font-size: 12px;
+  }
+  thead th {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: .55rem .7rem;
+    text-align: left;
+    color: var(--amber);
+    font-weight: 500; font-size: 11px;
+    letter-spacing: .07em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  thead th:first-child { color: var(--text-d); }
+  tbody tr { transition: background .15s; }
+  tbody tr:hover { background: var(--bg3); }
+  tbody td {
+    border: 1px solid var(--border);
+    padding: .35rem .5rem;
+  }
+  tbody td:first-child {
+    color: var(--text-d); text-align: center;
+    font-size: 11px; white-space: nowrap;
+    background: var(--bg2);
+  }
+  tbody td input {
+    width: 100%; min-width: 80px;
+    background: transparent;
+    border: none; outline: none;
+    color: var(--text-l);
+    font-family: var(--mono); font-size: 12px;
+    text-align: right; padding: .1rem .2rem;
+  }
+  tbody td input.err { color: var(--red); }
+  tbody td input::placeholder { color: var(--text-d); opacity: .5; }
+
+  /* ── BUTTONS ── */
+  .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--display); font-size: 1.1rem;
+    letter-spacing: .1em;
+    padding: .65rem 1.6rem;
+    border: none; cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-primary {
+    background: var(--amber);
+    color: #0e0d0b;
+  }
+  .btn-primary:hover { background: var(--amber-l); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-d);
+  }
+  .btn-secondary:hover { border-color: var(--text-d); color: var(--text); }
+
+  /* ── RESULTS ── */
+  #resultado { display: none; }
+  #resultado.visible { display: block; }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .result-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 1.2rem 1.3rem;
+    position: relative; overflow: hidden;
+  }
+  .result-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--amber);
+  }
+  .result-card.highlight::before { background: var(--amber-l); }
+  .result-card .rc-label {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--text-d); letter-spacing: .1em;
+    text-transform: uppercase; margin-bottom: .4rem;
+  }
+  .result-card .rc-value {
+    font-family: var(--display); font-size: 2rem;
+    color: var(--amber-l); letter-spacing: .04em;
+    line-height: 1.1;
+  }
+  .result-card .rc-sub {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--text-d); margin-top: .25rem;
+  }
+  .result-card.highlight .rc-value { color: var(--text-l); }
+
+  /* ── BREAKDOWN TABLE ── */
+  .breakdown {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .breakdown-header {
+    padding: .75rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--display); font-size: 1.1rem;
+    color: var(--text-l); letter-spacing: .08em;
+  }
+  .breakdown table { font-size: 13px; }
+  .breakdown thead th { background: var(--bg2); }
+  .breakdown .bar-cell { min-width: 120px; }
+  .bar-bg {
+    background: var(--bg2);
+    height: 6px; border-radius: 0;
+    overflow: hidden; margin-top: 3px;
+  }
+  .bar-fill {
+    height: 100%; background: var(--amber);
+    transition: width .6s ease;
+  }
+  .val-pos { color: var(--amber-l); }
+  .val-neg { color: #e07070; }
+
+  /* ── ERROR BANNER ── */
+  .error-banner {
+    display: none;
+    background: #2a0f0d;
+    border: 1px solid var(--red);
+    color: #e07070;
+    font-family: var(--mono); font-size: 12px;
+    padding: .7rem 1rem;
+    margin-top: 1rem;
+  }
+  .error-banner.visible { display: block; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--text-d);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+  }
+  footer a { color: var(--amber-d); text-decoration: none; }
+  footer a:hover { color: var(--amber); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s, transform .5s; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 600px) {
+    main { padding: 1rem; }
+    h1 { font-size: 2.5rem; }
+    .graus-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">Sistema de Gestão · v1.0</div>
+  <h1>MINA <span>FERRO</span> PELADO</h1>
+  <div class="header-sub">Central de pedidos e faturamento por grau de pureza</div>
+</header>
+
+<main>
+
+  <!-- SEÇÃO 1: VALORES POR GRAU -->
+  <section class="reveal">
+    <div class="section-label">
+      <span class="num">01</span>
+      <span class="title">Valor por tonelada — grau de pureza</span>
+      <span class="hint">R$/ton</span>
+    </div>
+    <div class="graus-grid" id="grausGrid"></div>
+  </section>
+
+  <!-- SEÇÃO 2: PEDIDOS -->
+  <section class="reveal">
+    <div class="section-label">
+      <span class="num">02</span>
+      <span class="title">Quantidade extraída por pedido</span>
+      <span class="hint">toneladas</span>
+    </div>
+    <div class="pedidos-wrap">
+      <table id="pedidosTable"></table>
+    </div>
+  </section>
+
+  <!-- AÇÕES -->
+  <div class="actions reveal">
+    <button class="btn btn-primary" onclick="calcular()">▶ Calcular relatório</button>
+    <button class="btn btn-secondary" onclick="limpar()">↺ Limpar tudo</button>
+  </div>
+  <div class="error-banner" id="errBanner">⚠ Preencha todos os campos com valores maiores que zero.</div>
+
+  <!-- SEÇÃO 3: RESULTADO -->
+  <section id="resultado">
+    <div class="section-label">
+      <span class="num">03</span>
+      <span class="title">Relatório final</span>
+    </div>
+
+    <div class="result-grid" id="resumoCards"></div>
+
+    <div class="breakdown">
+      <div class="breakdown-header">Faturamento por grau de pureza</div>
+      <div class="pedidos-wrap">
+        <table id="breakdownTable">
+          <thead>
+            <tr>
+              <th>Grau</th>
+              <th>Toneladas</th>
+              <th>Faturamento bruto</th>
+              <th>Custo mão de obra</th>
+              <th>Lucro líquido</th>
+              <th class="bar-cell">Participação</th>
+            </tr>
+          </thead>
+          <tbody id="breakdownBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>Mina Ferro Pelado © 2025</span>
+  <span>Desenvolvido como projeto de portfólio em C + Web · <a href="#">Ver no GitHub</a></span>
+</footer>
+
+<script>
+const SALARIO = 106.96;
+const NUM_PEDIDOS = 12;
+
+const GRAUS = [
+  { id: 'alto',   nome: 'Alto Grau',                pct: '≥ 95% de ferro' },
+  { id: 'medna',  nome: 'Grau Médio Nacional',       pct: '≥ 85% de ferro' },
+  { id: 'medint', nome: 'Grau Médio Internacional',  pct: '≥ 80% de ferro' },
+  { id: 'medio',  nome: 'Grau Médio',                pct: '≥ 75% de ferro' },
+  { id: 'baixo',  nome: 'Grau Baixo',                pct: '< 75% de ferro' },
+];
+
+// ── BUILD GRAUS INPUTS ──
+const grausGrid = document.getElementById('grausGrid');
+GRAUS.forEach(g => {
+  grausGrid.innerHTML += `
+    <div class="grau-card">
+      <label>${g.nome}</label>
+      <div class="grau-pct">${g.pct}</div>
+      <input id="val_${g.id}" type="number" min="0.01" step="0.01" placeholder="0,00" />
+    </div>`;
+});
+
+// ── BUILD PEDIDOS TABLE ──
+const tbl = document.getElementById('pedidosTable');
+let thead = '<thead><tr><th>Pedido</th>';
+GRAUS.forEach(g => thead += `<th>${g.nome}</th>`);
+thead += '</tr></thead>';
+
+let tbody = '<tbody>';
+for (let i = 0; i < NUM_PEDIDOS; i++) {
+  tbody += `<tr><td>#${String(i+1).padStart(2,'0')}</td>`;
+  GRAUS.forEach(g => {
+    tbody += `<td><input id="q_${g.id}_${i}" type="number" min="0" step="0.01" placeholder="0.00"/></td>`;
+  });
+  tbody += '</tr>';
+}
+tbody += '</tbody>';
+tbl.innerHTML = thead + tbody;
+
+// ── CALCULAR ──
+function calcular() {
+  // validate valores
+  let ok = true;
+  const vals = {};
+  GRAUS.forEach(g => {
+    const el = document.getElementById('val_'+g.id);
+    const v = parseFloat(el.value);
+    if (!v || v <= 0) { el.classList.add('err'); ok = false; }
+    else { el.classList.remove('err'); vals[g.id] = v; }
+  });
+
+  // validate pedidos
+  const qtds = {};
+  GRAUS.forEach(g => { qtds[g.id] = []; });
+  for (let i = 0; i < NUM_PEDIDOS; i++) {
+    GRAUS.forEach(g => {
+      const el = document.getElementById(`q_${g.id}_${i}`);
+      const v = parseFloat(el.value) || 0;
+      if (v < 0) { el.classList.add('err'); ok = false; }
+      else { el.classList.remove('err'); qtds[g.id].push(v); }
+    });
+  }
+
+  const banner = document.getElementById('errBanner');
+  if (!ok) { banner.classList.add('visible'); return; }
+  banner.classList.remove('visible');
+
+  // ── CALCULAR TOTAIS ──
+  const res = {};
+  let fatTotal = 0, lucroTotal = 0;
+
+  GRAUS.forEach(g => {
+    let fat = 0, custo = 0, tons = 0;
+    qtds[g.id].forEach(q => {
+      fat   += q * vals[g.id];
+      custo += q * SALARIO;
+      tons  += q;
+    });
+    res[g.id] = { fat, custo, lucro: fat - custo, tons };
+    fatTotal   += fat;
+    lucroTotal += fat - custo;
+  });
+
+  // ── RANKINGS ──
+  let melhorFat = GRAUS[0], maiorTon = GRAUS[0];
+  GRAUS.forEach(g => {
+    if (res[g.id].fat  > res[melhorFat.id].fat)  melhorFat = g;
+    if (res[g.id].tons > res[maiorTon.id].tons)  maiorTon  = g;
+  });
+
+  // ── RENDER CARDS ──
+  document.getElementById('resumoCards').innerHTML = `
+    <div class="result-card highlight">
+      <div class="rc-label">Lucro líquido total</div>
+      <div class="rc-value">${fmt(lucroTotal)}</div>
+      <div class="rc-sub">Descontada mão de obra (R$ ${SALARIO.toFixed(2)}/ton)</div>
+    </div>
+    <div class="result-card">
+      <div class="rc-label">Faturamento bruto total</div>
+      <div class="rc-value">${fmt(fatTotal)}</div>
+      <div class="rc-sub">Soma de todos os graus e pedidos</div>
+    </div>
+    <div class="result-card">
+      <div class="rc-label">Maior receita por grau</div>
+      <div class="rc-value" style="font-size:1.2rem;line-height:1.3">${melhorFat.nome}</div>
+      <div class="rc-sub">${fmt(res[melhorFat.id].fat)} em faturamento</div>
+    </div>
+    <div class="result-card">
+      <div class="rc-label">Maior volume extraído</div>
+      <div class="rc-value" style="font-size:1.2rem;line-height:1.3">${maiorTon.nome}</div>
+      <div class="rc-sub">${res[maiorTon.id].tons.toFixed(2)} toneladas</div>
+    </div>
+  `;
+
+  // ── RENDER BREAKDOWN ──
+  const maxFat = Math.max(...GRAUS.map(g => res[g.id].fat)) || 1;
+  let rows = '';
+  GRAUS.forEach(g => {
+    const r = res[g.id];
+    const pct = fatTotal > 0 ? (r.fat / fatTotal * 100).toFixed(1) : '0.0';
+    const barW = (r.fat / maxFat * 100).toFixed(1);
+    const lucroClass = r.lucro >= 0 ? 'val-pos' : 'val-neg';
+    rows += `
+      <tr>
+        <td style="color:var(--text)">${g.nome}</td>
+        <td style="text-align:right">${r.tons.toFixed(2)}</td>
+        <td style="text-align:right;color:var(--amber-l)">${fmt(r.fat)}</td>
+        <td style="text-align:right;color:var(--text-d)">${fmt(r.custo)}</td>
+        <td style="text-align:right" class="${lucroClass}">${fmt(r.lucro)}</td>
+        <td class="bar-cell">
+          <span style="font-size:11px;color:var(--text-d)">${pct}%</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:${barW}%"></div></div>
+        </td>
+      </tr>`;
+  });
+  document.getElementById('breakdownBody').innerHTML = rows;
+
+  // ── SHOW ──
+  const sec = document.getElementById('resultado');
+  sec.classList.add('visible');
+  setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function fmt(v) {
+  return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function limpar() {
+  document.querySelectorAll('input').forEach(el => { el.value = ''; el.classList.remove('err'); });
+  document.getElementById('resultado').classList.remove('visible');
+  document.getElementById('errBanner').classList.remove('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
