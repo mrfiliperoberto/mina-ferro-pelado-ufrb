@@ -7,7 +7,7 @@
 Sistema de linha de comando desenvolvido em **C** para gerenciar pedidos de minério de ferro classificados por grau de pureza, calculando faturamento, lucro e estatísticas por categoria.
 
 > Projeto desenvolvido como exercício prático de lógica de programação em C, com foco em estruturas de dados, loops e cálculos financeiros.
-
+> Projeto iniciado em 2023, durante as aulas de Programação de Computadores I, na UFRB-CETENS. Retornado em 2026, visando consolidação da lógica de programação em C.
 
 
 ## 📋 Funcionalidades
