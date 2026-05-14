@@ -1,6 +1,6 @@
 # ⛏️ Mina Ferro Pelado — Sistema de Gestão de Pedidos
 
-Filipe Roberto Fernandes de Oliveira 
+ 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/filiperobertofernandes/?locale=en-US)
 [![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/mrfiliperoberto)
 
