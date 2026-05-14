@@ -9,7 +9,6 @@ Sistema de linha de comando desenvolvido em **C** para gerenciar pedidos de min�
 > Projeto desenvolvido como exercício prático de lógica de programação em C, com foco em estruturas de dados, loops e cálculos financeiros.
 > Projeto iniciado em 2023, durante as aulas de Programação de Computadores I, na UFRB-CETENS. Retornado em 2026, visando consolidação da lógica de programação em C.
 
-
 ## 📋 Funcionalidades
 
 - Cadastro de valores por grau de pureza (Alto, Médio Nacional, Médio Internacional, Médio e Baixo)
